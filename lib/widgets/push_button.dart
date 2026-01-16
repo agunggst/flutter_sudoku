@@ -4,6 +4,7 @@ class PushButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
   final double fontSize;
+  final String fontFamily;
   final double paddingH;
   final double paddingV;
 
@@ -12,6 +13,7 @@ class PushButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.fontSize = 24,
+    this.fontFamily = "Rufing",
     this.paddingH = 28,
     this.paddingV = 14,
   });
@@ -61,6 +63,7 @@ class _PushButtonState extends State<PushButton> {
             color: Colors.white,
             fontSize: widget.fontSize,
             fontWeight: FontWeight.bold,
+            fontFamily: widget.fontFamily
           ),
         ),
       ),
