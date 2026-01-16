@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 class PushButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
+  final double fontSize;
+  final double paddingH;
+  final double paddingV;
 
   const PushButton({
     super.key,
     required this.text,
     required this.onPressed,
+    this.fontSize = 24,
+    this.paddingH = 28,
+    this.paddingV = 14,
   });
 
   @override
@@ -37,7 +43,7 @@ class _PushButtonState extends State<PushButton> {
           _isPressed ? 4 : 0,
           0,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: widget.paddingH, vertical: widget.paddingV),
         decoration: BoxDecoration(
           color: const Color(0xFFFF4B2B),
           borderRadius: BorderRadius.circular(8),
@@ -51,9 +57,9 @@ class _PushButtonState extends State<PushButton> {
         ),
         child: Text(
           widget.text,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: widget.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sudoku/widgets/push_button.dart';
+import 'package:flutter_sudoku/widgets/stop_watch.dart';
+// import 'package:flutter_sudoku/widgets/number_tiles.dart';
 
-class SudokuGamePage extends StatelessWidget {
+class SudokuGamePage extends StatefulWidget {
   const SudokuGamePage({super.key});
+
+  @override
+  State<SudokuGamePage> createState() => _SudokuGamePageState();
+}
+
+class _SudokuGamePageState extends State<SudokuGamePage> {
+  final GlobalKey<StopWatchState> stopwatchKey = GlobalKey<StopWatchState>();
+  bool get isPaused => stopwatchKey.currentState?.isPaused ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +30,33 @@ class SudokuGamePage extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsGeometry.all(16),
+          padding: const EdgeInsetsGeometry.all(16),
           child: Center(
             child: Column(
               children: [
-                const Text("Hello this is sudoku")
+                // StopWatch(key: stopwatchKey,)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    StopWatch(key: stopwatchKey,),
+                    PushButton(
+                      text: isPaused ? "▶" : "⏸",
+                      paddingH: 8,
+                      paddingV: 4,
+                      fontSize: 12,
+                      onPressed: () {
+                        setState(() {
+                          if (isPaused) {
+                            stopwatchKey.currentState?.continueTimer();
+                          } else {
+                            stopwatchKey.currentState?.pauseTimer();
+                          }
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

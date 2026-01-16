@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sudoku/pages/how_to_play.dart';
 import 'package:flutter_sudoku/pages/sudoku.dart';
 import 'package:flutter_sudoku/widgets/push_button.dart';
 
@@ -28,7 +29,17 @@ class HomePage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const SudokuGamePage())
                     );
                   }
-                )
+                ),
+                const SizedBox(height: 20,),
+                PushButton(
+                  text: "HOW TO PLAY", 
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => const HowToPlayPage())
+                    );
+                  }
+                ),
               ],
             ),
           ),
