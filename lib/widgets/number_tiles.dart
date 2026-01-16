@@ -13,12 +13,14 @@ class NumberTiles extends StatefulWidget {
 }
 
 class _NumberTilesState extends State<NumberTiles> {
+  bool isActive = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      width: 30,
-      height: 30,
+      width: 35,
+      height: 35,
       padding: EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Color(0xFFFEEE91),
@@ -39,7 +41,7 @@ class _NumberTilesState extends State<NumberTiles> {
         ]
       ),
       child: Text(
-        widget.text,
+        widget.text == "0" ? " " : widget.text,
         style: TextStyle(
           fontFamily: 'Cartoon'
         ),

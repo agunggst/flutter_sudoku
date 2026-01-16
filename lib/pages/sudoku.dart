@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sudoku/functions/generate_sudoku_board.dart';
+import 'package:flutter_sudoku/widgets/number_tiles.dart';
 import 'package:flutter_sudoku/widgets/push_button.dart';
 import 'package:flutter_sudoku/widgets/stop_watch.dart';
 // import 'package:flutter_sudoku/widgets/number_tiles.dart';
@@ -11,8 +13,27 @@ class SudokuGamePage extends StatefulWidget {
 }
 
 class _SudokuGamePageState extends State<SudokuGamePage> {
+  List<List<int>> sudokuBoard = [
+    [6,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,4,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,7,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+  ];
   final GlobalKey<StopWatchState> stopwatchKey = GlobalKey<StopWatchState>();
   bool get isPaused => stopwatchKey.currentState?.isPaused ?? false;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      sudokuBoard = generateSudokuByDifficulty('medium');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +55,6 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
           child: Center(
             child: Column(
               children: [
-                // StopWatch(key: stopwatchKey,)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +75,28 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
                         });
                       },
                     ),
+                    const SizedBox(height: 64,),
                   ],
+                ),
+                Column(
+                  children: List.generate(9, (row) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(9, (col) {
+                        return Row(
+                          children: [
+                            Column(
+                              children: [
+                                NumberTiles(text: sudokuBoard[row][col].toString()),
+                                SizedBox(height: (row+1)%3 == 0 ? 8 : 0,)
+                              ],
+                            ),
+                            SizedBox(width: (col+1)%3 == 0 && (col+1) != 9 ? 8 : 0,)
+                          ],
+                        );
+                      }),
+                    );
+                  }),
                 ),
               ],
             ),
