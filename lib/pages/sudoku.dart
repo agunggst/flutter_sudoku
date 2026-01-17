@@ -78,6 +78,8 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
                               stopwatchKey.currentState?.continueTimer();
                             } else {
                               stopwatchKey.currentState?.pauseTimer();
+                              isShowNumpad = false;
+                              activeCell = null;
                             }
                           });
                         },
@@ -102,7 +104,7 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
                                               activeCell![0] == row &&
                                               activeCell![1] == col,
                                     onTilesTap: (coordinate, isClue) {
-                                      if (!isClue) {
+                                      if (!isClue && !isPaused) {
                                         setState(() {
                                           activeCell = coordinate;
                                           isShowNumpad = true;
