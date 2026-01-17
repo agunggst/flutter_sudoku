@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sudoku/widgets/push_button.dart';
 
 class NumPad extends StatefulWidget {
-  const NumPad({super.key});
+  final Function(int) onNumpadPressed;
+  const NumPad({
+    super.key,
+    required this.onNumpadPressed
+  });
 
   @override
   State<NumPad> createState() => _NumPadState();
@@ -29,7 +33,9 @@ class _NumPadState extends State<NumPad> {
           paddingV: 4,
           fontSize: 16,
           fontFamily: "Cartoon",
-          onPressed: () {}
+          onPressed: () {
+            widget.onNumpadPressed(numList[index]);
+          }
         );
       }    
     );

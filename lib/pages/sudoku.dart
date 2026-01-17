@@ -15,16 +15,19 @@ class SudokuGamePage extends StatefulWidget {
 
 class _SudokuGamePageState extends State<SudokuGamePage> {
   List<List<int>> sudokuBoard = [];
+  List<List<int>> sudokuBoardCopy = [];
+  bool isShowNumpad = false;
+  List<int>? activeCell;
   final GlobalKey<StopWatchState> stopwatchKey = GlobalKey<StopWatchState>();
   bool get isPaused => stopwatchKey.currentState?.isPaused ?? false;
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      sudokuBoard = generateSudokuByDifficulty('medium');
-    });
+    sudokuBoard = generateSudokuByDifficulty('medium');
+    sudokuBoardCopy = sudokuBoard.map((row) => [...row]).toList();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +94,22 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
                             children: [
                               Column(
                                 children: [
-                                  NumberTiles(text: sudokuBoard[row][col].toString()),
+                                  NumberTiles(
+                                    text: sudokuBoard[row][col].toString(),
+                                    isClue: sudokuBoardCopy[row][col] == 0 ? false : true,
+                                    coordinate: [row, col],
+                                    isActive: activeCell != null &&
+                                              activeCell![0] == row &&
+                                              activeCell![1] == col,
+                                    onTilesTap: (coordinate, isClue) {
+                                      if (!isClue) {
+                                        setState(() {
+                                          activeCell = coordinate;
+                                          isShowNumpad = true;
+                                        });
+                                      }
+                                    }
+                                  ),
                                   SizedBox(height: (row+1)%3 == 0 ? 8 : 0,)
                                 ],
                               ),
@@ -102,26 +120,53 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
                       );
                     }),
                   ),
+                  const SizedBox(height: 16,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PushButton(
+                        text: "Reset", 
+                        paddingH: 28,
+                        paddingV: 8,
+                        fontSize: 16,
+                        onPressed: () {
+                          setState(() {
+                            sudokuBoard = sudokuBoardCopy.map((row) => [...row]).toList();
+                          });
+                        }
+                      ),
+                      const SizedBox(width: 8,),
+                      PushButton(
+                        text: "Submit", 
+                        paddingH: 28,
+                        paddingV: 8,
+                        fontSize: 16,
+                        onPressed: () {}
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 28,),
-                  // NumPad()
-                  Container(
-                    width: 100,
-                    // height: ,
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        NumPad(),
-                        const SizedBox(height: 20,),
-                        PushButton(
-                          text: "Check", 
-                          paddingH: 28,
-                          paddingV: 8,
-                          fontSize: 16,
-                          onPressed: () {}
-                        )
-                      ],
+                  if (isShowNumpad)
+                    Container(
+                      width: 100,
+                      // height: ,
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          NumPad(
+                            onNumpadPressed: (number) {
+                              // print("Angka: $number masukkan ke tile $activeCell");
+                              setState(() {
+                                sudokuBoard[activeCell![0]][activeCell![1]] = number;
+                                isShowNumpad = false;
+                                activeCell = null;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+                  const SizedBox(height: 20,),
                 ],
               ),
             ),
