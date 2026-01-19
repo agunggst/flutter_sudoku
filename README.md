@@ -45,8 +45,6 @@ Through this project, I aimed to go beyond theory and truly understand how Flutt
   <img src="project_screenshots/Screenshot_3.png" width="30%">
 </p>
 
-> Replace `YOUR_IMAGE_X` with the screenshots you uploaded.
-
 ---
 
 ## ⚙️ Technologies Used
