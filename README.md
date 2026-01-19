@@ -114,7 +114,6 @@ One of the biggest challenges was making the UI and the user's experience feel *
 ## 🔮 Future Improvements (Optional)
 
 * 🎚 Difficulty levels (Easy / Medium / Hard)
-* ❌ Mistake detection
 * 💾 Save progress
 * 🏆 Best time leaderboard
 * 🎵 Sound effects & animations
