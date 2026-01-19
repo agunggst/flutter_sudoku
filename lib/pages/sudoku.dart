@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sudoku/core/overlay_manager.dart';
 import 'package:flutter_sudoku/functions/generate_sudoku_board.dart';
+import 'package:flutter_sudoku/functions/is_sudoku_filled.dart';
+import 'package:flutter_sudoku/functions/validate_sudoku_board.dart';
+import 'package:flutter_sudoku/widgets/game_over.dart';
 import 'package:flutter_sudoku/widgets/modals/simple_dialog.dart';
 import 'package:flutter_sudoku/widgets/number_tiles.dart';
 import 'package:flutter_sudoku/widgets/numpad.dart';
@@ -17,17 +21,29 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
   List<List<int>> sudokuBoard = [];
   List<List<int>> sudokuBoardCopy = [];
   bool isShowNumpad = false;
+  bool canSubmit = false;
   List<int>? activeCell;
   final GlobalKey<StopWatchState> stopwatchKey = GlobalKey<StopWatchState>();
   bool get isPaused => stopwatchKey.currentState?.isPaused ?? false;
+  String errorText = "Silahkan lengkapi sudoku terlebih dahulu";
 
   @override
   void initState() {
     super.initState();
-    sudokuBoard = generateSudokuByDifficulty('medium');
+    sudokuBoard = generateSudokuByDifficulty('easy');
     sudokuBoardCopy = sudokuBoard.map((row) => [...row]).toList();
   }
 
+  void gameOver() {
+    setState(() {
+      stopwatchKey.currentState?.pauseTimer();
+      isShowNumpad = false;
+      OverlayManager().showOverlay(
+        context,
+        GameOver()
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +64,7 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
         appBar: AppBar(
           backgroundColor: Color(0xFFFFA239),
           shadowColor: Colors.black54,
-          toolbarHeight: 100,
+          toolbarHeight: 80,
           elevation: 8,
           title: Image(
             image: AssetImage('assets/flutter_sudoku_logo.png'),
@@ -127,27 +143,52 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       PushButton(
-                        text: "Reset", 
+                        text: "Ulangi", 
                         paddingH: 28,
                         paddingV: 8,
                         fontSize: 16,
                         onPressed: () {
                           setState(() {
                             sudokuBoard = sudokuBoardCopy.map((row) => [...row]).toList();
+                            canSubmit = false;
+                            isShowNumpad = false;
+                            activeCell = null;
                           });
                         }
                       ),
                       const SizedBox(width: 8,),
                       PushButton(
-                        text: "Submit", 
+                        text: "Periksa", 
                         paddingH: 28,
                         paddingV: 8,
                         fontSize: 16,
-                        onPressed: () {}
+                        onPressed: () {
+                          bool checkResult = validateSudokuBoard(sudokuBoard);
+                          print(checkResult);
+                          if (checkResult) {
+                            gameOver();
+                          } else {
+                            setState(() {
+                              errorText = "Masih ada yang salah... Coba lagi";
+                              canSubmit = false;
+                            });
+                          }
+                        },
+                        enabled: canSubmit,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 28,),
+                  if (!canSubmit)
+                    const SizedBox(height: 12,),
+                  if (!canSubmit)
+                    Text(
+                      errorText,
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontFamily: "Cartoon"
+                      ),
+                    ),
+                  const SizedBox(height: 16,),
                   if (isShowNumpad)
                     Container(
                       width: 100,
@@ -157,9 +198,25 @@ class _SudokuGamePageState extends State<SudokuGamePage> {
                         children: [
                           NumPad(
                             onNumpadPressed: (number) {
-                              // print("Angka: $number masukkan ke tile $activeCell");
                               setState(() {
                                 sudokuBoard[activeCell![0]][activeCell![1]] = number;
+                                // CHEAT!!
+                                // List<List<int>> solvedBoard = [
+                                //   [4, 1, 2, 6, 5, 9, 3, 8, 7],
+                                //   [3, 5, 6, 2, 7, 8, 9, 1, 4],
+                                //   [9, 8, 7, 3, 1, 4, 5, 6, 2],
+
+                                //   [1, 9, 5, 8, 4, 3, 2, 7, 6],
+                                //   [7, 6, 3, 5, 2, 1, 8, 4, 9],
+                                //   [8, 2, 4, 7, 9, 6, 1, 3, 5],
+
+                                //   [2, 7, 8, 1, 6, 5, 4, 9, 3],
+                                //   [6, 3, 9, 4, 8, 2, 7, 5, 1],
+                                //   [5, 4, 1, 9, 3, 7, 6, 2, 8],
+                                // ];
+                                // sudokuBoard = solvedBoard;
+
+                                canSubmit = isSudokuFilled(sudokuBoard);
                                 isShowNumpad = false;
                                 activeCell = null;
                               });

@@ -22,7 +22,8 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20,),
                 PushButton(
-                  text: "START", 
+                  text: "MULAI", 
+                  // fontFamily: "Cartoon",
                   onPressed: () {
                     Navigator.push(
                       context, 
@@ -32,7 +33,8 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20,),
                 PushButton(
-                  text: "HOW TO PLAY", 
+                  text: "Panduan Bermain", 
+                  // fontFamily: "Cartoon",
                   onPressed: () {
                     Navigator.push(
                       context, 
