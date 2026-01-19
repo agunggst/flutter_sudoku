@@ -107,7 +107,7 @@ This project helped me understand:
 * Timer-based logic
 * Designing game flow (start → play → win)
 
-One of the biggest challenges was making the UI feel **game-like**, not like a standard form-based Flutter app.
+One of the biggest challenges was making the UI and the user's experience feel **game-like**, not like a standard form-based Flutter app.
 
 ---
 
