@@ -33,7 +33,6 @@ Through this project, I aimed to go beyond theory and truly understand how Flutt
 * 🏆 Win screen modal
 * 🔁 Restart game option
 * 🎨 Custom colorful UI & layout
-* 📱 Fully responsive mobile layout
 
 ---
 
